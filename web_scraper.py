@@ -49,19 +49,6 @@ for date, mission in zip(a, b):
     
     # if it is after, use that data and exit loop
 
-
-# # Function to find data given start and end string
-# def get_launch_data(start_str, end_str, search_start_index=0):
-#     start_index = html.find(start_str) + len(start_str)
-#     end_index = html.find(end_str)
-#     return html[start_index: end_index]
-
-# Get launch data and strip spaces from beginning and end
-# launch_name = get_launch_data('</span><span class="mission">', '</span></div>').strip()
-# # launch_date = get_launch_data('<span class="launchdate">', '</span><span class="mission">').strip()
-# launch_date = 'Nov. 25' # Temporary launch date until Falcon 9 launch removed from website
-# launch_time = get_launch_data('Launch time:</span> ', '<span class="strong"><br />').strip()
-
 # Clean launch data into usable format
 launch_time_cleaned = launch_time[:launch_time.find('GMT')+len('GMT')]
 
