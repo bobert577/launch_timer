@@ -28,10 +28,6 @@ launch_name = get_launch_data('</span><span class="mission">', '</span></div>').
 launch_date = 'Nov. 25' # Temporary launch date until Falcon 9 launch removed from website
 launch_time = get_launch_data('Launch time:</span> ', '<span class="strong"><br />').strip()
 
-# print(launch_name)
-# print(launch_date)
-# print(launch_time)
-
 # Clean launch data into usable format
 launch_time_cleaned = launch_time[:launch_time.find('GMT')+len('GMT')]
 
@@ -43,34 +39,48 @@ current_year = str(current_date.year)
 launch_datetime = current_year + launch_date + launch_time_cleaned
 launch_datetime_parsed = datetime.strptime(launch_datetime, '%Y%b. %d%H%M:%S %Z')
 
-# Get timedelta object of time until launch
-length_of_countdown = launch_datetime_parsed - datetime.utcnow()
-#print(length_of_countdown)
-
-hours = str(abs(np.floor(length_of_countdown.total_seconds() / 3600)))
-minutes = str(np.floor((length_of_countdown.total_seconds() % 3600) / 60))
-seconds = str(np.floor(length_of_countdown.total_seconds() % 60))
-
-
 
 #####################################################
 ################## Countdown GUI ####################
 #####################################################
-# define the countdown func. 
-def countdown(t): 
+
+# Define tk elements
+root = Tk()
+root.title('Launch Countdown Timer')
+root.geometry('500x250')
+
+# Launch timer header which includes launch info
+timer_header = Label(root, text=launch_name, font=('Helvetica', 20), bg='black', fg='white')
+timer_header.pack(pady=20, ipadx=10, ipady=10)
+
+# Assign initial time until launch
+length_of_countdown = launch_datetime_parsed - datetime.utcnow()
+time_left_seconds = length_of_countdown.total_seconds()
+
+# Define time string as a StringVar for Tkinter
+time_string_to_display = StringVar()
+
+while time_left_seconds:
+    # Get timedelta object of time until launch
+    length_of_countdown = launch_datetime_parsed - datetime.utcnow()
+    #print(length_of_countdown)
+
+    # Time until launch in seconds
+    time_left_seconds = length_of_countdown.total_seconds()
+
+    # Calculate hours, minutes, and seconds until next launch
+    hours = int(abs(time_left_seconds / 3600))
+    minutes = int(np.floor(time_left_seconds % 3600) / 60)
+    seconds = int(np.floor(time_left_seconds % 60))
     
-    while t: 
-        mins, secs = divmod(t, 60) 
-        timer = '{:02d}:{:02d}'.format(mins, secs) 
-        print(timer, end="\r") 
-        time.sleep(1) 
-        t -= 1
-      
-    print('Fire in the hole!!') 
-  
-  
-# input time in seconds 
-t = length_of_countdown.total_seconds()
-  
-# function call 
-countdown(int(t)) 
+    # Format string for timer to display
+    time_string_to_display = '{}:{}:{}'.format(hours, minutes, seconds)
+    
+    # Print label to display on timer
+    timer_time_display = Label(root, text=time_string_to_display, font=('Helvetica', 15), bg='black', fg='red')
+    timer_time_display.pack(pady=20, ipadx=10, ipady=10)
+    
+    time.sleep(1)
+    root.update()
+
+root.mainloop()
