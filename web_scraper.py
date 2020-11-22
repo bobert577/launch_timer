@@ -51,7 +51,6 @@ for date, missiondata, mission in zip(a, b, c):
 
     # if date of mission is in future, break loop and proceed
     if launch_datetime_parsed > current_date:
-        print('good to go!')
         break
 
 
