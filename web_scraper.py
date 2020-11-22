@@ -60,6 +60,11 @@ time_left_seconds = length_of_countdown.total_seconds()
 # Define time string as a StringVar for Tkinter
 time_string_to_display = StringVar()
 
+time_string_to_display = ' '
+
+timer_time_display = Label(root, text=time_string_to_display, font=('Helvetica', 15), bg='black', fg='red')
+timer_time_display.pack(pady=20, ipadx=10, ipady=10)
+
 while time_left_seconds:
     # Get timedelta object of time until launch
     length_of_countdown = launch_datetime_parsed - datetime.utcnow()
@@ -77,8 +82,7 @@ while time_left_seconds:
     time_string_to_display = '{}:{}:{}'.format(hours, minutes, seconds)
     
     # Print label to display on timer
-    timer_time_display = Label(root, text=time_string_to_display, font=('Helvetica', 15), bg='black', fg='red')
-    timer_time_display.pack(pady=20, ipadx=10, ipady=10)
+    timer_time_display.config(text = time_string_to_display)
     
     time.sleep(1)
     root.update()
