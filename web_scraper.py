@@ -25,27 +25,27 @@ current_date = datetime.today()
 
 # Run for loop until future launch is found (website isn't updated automatically)
 for date, missiondata, mission in zip(a, b, c):
-    # Assign launch name
+    # Define launch info
+    mission_date = date.text
+    mission_time = missiondata.contents[1].strip()[0:4]
     launch_name = mission.text
-        
-    # Combine time/date data to be parsed together
-    missiontime = missiondata.text[13:17]
-    # If mission time is "TBD" assign it as 0001 so you don't miss the launch!
-    if missiontime.find('TBD') != -1:
-        missiontime = '0001'
 
+    # Skip to next interation if date is TBD
+    if date.text == 'TBD' or mission_time.find('TBD') != -1:
+        continue    
+        
     # Clean date (can have '/' in date so make sure to remove them)
-    if date.text.find('/') != -1:
+    if mission_date.find('/') != -1:
         # Get month of launch
-        split_month = date.text.split()[0]
+        split_month = mission_date.split()[0]
         # Get day of launch (GMT will always be 2nd of two dates provided)
-        split_day = date.text.split('/')[1]
+        split_day = mission_date.split('/')[1]
         date_cleaned = split_month + ' ' + split_day
     else:
-        date_cleaned = date.text
-    
+        date_cleaned = mission_date
+        
     # Concatenate all date info into one string for parseing
-    mission_date_time = str(current_date.year) + date_cleaned + missiontime + 'GMT'
+    mission_date_time = str(current_date.year) + date_cleaned + mission_time + 'GMT'
     # Parse the string to get datetime object
     launch_datetime_parsed = datetime.strptime(mission_date_time, '%Y%b. %d%H%M%Z')
 
